@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service-monitor", "service-monitor\service-monitor.csproj", "{BFC9866E-77BD-4B08-913C-D25000A0C904}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BFC9866E-77BD-4B08-913C-D25000A0C904}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFC9866E-77BD-4B08-913C-D25000A0C904}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFC9866E-77BD-4B08-913C-D25000A0C904}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFC9866E-77BD-4B08-913C-D25000A0C904}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
