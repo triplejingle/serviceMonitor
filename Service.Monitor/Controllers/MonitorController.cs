@@ -5,6 +5,7 @@ using service_monitor.Models;
 namespace service_monitor.Controllers;
 
 [ApiController]
+[Route("/v1")]
 public class MonitorController : ControllerBase
 {
     private readonly IEventRepository _eventRepository;
