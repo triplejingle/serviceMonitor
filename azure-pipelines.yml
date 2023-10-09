@@ -33,6 +33,6 @@ stages:
             inputs:
               command: push
               containerRegistry: 'appset-registry'
-              repository: 'appointments'
+              repository: 'service-monitor'
               tags: $(Build.BuildNumber)
               Dockerfile: './Dockerfile'      

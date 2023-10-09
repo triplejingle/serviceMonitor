@@ -13,8 +13,8 @@ ENV VSS_NUGET_EXTERNAL_FEED_ENDPOINTS '{"endpointCredentials":[{"endpoint":"http
 # Get and install the Artifact Credential provider
 RUN wget -O - https://raw.githubusercontent.com/Microsoft/artifacts-credprovider/master/helpers/installcredprovider.sh  | bash
 
-RUN dotnet restore "./Service.Appointments/Service.Appointments.csproj"
-RUN dotnet publish "./Service.Appointments/Service.Appointments.csproj" -c Release -o out
+RUN dotnet restore "./Service.Monitor/Service.Monitor.csproj"
+RUN dotnet publish "./Service.Monitor/Service.Monitor.csproj" -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
@@ -22,4 +22,4 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 EXPOSE 80/tcp
 
-ENTRYPOINT ["dotnet", "Service.Appointments.dll"]
+ENTRYPOINT ["dotnet", "Service.Monitor.dll"]

@@ -1,7 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using service_monitor.Domain;
 using service_monitor.Interfaces;
 using service_monitor.Models;
 
@@ -10,8 +7,8 @@ namespace service_monitor.Controllers;
 [ApiController]
 public class MonitorController : ControllerBase
 {
-    private readonly ILogger<MonitorController> _logger;
     private readonly IEventRepository _eventRepository;
+    private readonly ILogger<MonitorController> _logger;
 
     public MonitorController(ILogger<MonitorController> logger, IEventRepository eventRepository)
     {

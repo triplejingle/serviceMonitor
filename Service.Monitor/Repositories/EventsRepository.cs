@@ -4,19 +4,19 @@ using service_monitor.Interfaces;
 
 namespace service_monitor.repository;
 
-public class EventsRepository: IEventRepository
+public class EventsRepository : IEventRepository
 {
-    private readonly MongoClient MongoClient;
-    private readonly IMongoDatabase database;
     private const string _database = "monitor";
     private const string _collection = "monitor";
-    
+    private readonly IMongoDatabase database;
+    private readonly MongoClient MongoClient;
+
     public EventsRepository()
     {
-        var client = new MongoClient(Environment.GetEnvironmentVariable("MONGODB_CONNECTION")); 
+        var client = new MongoClient(Environment.GetEnvironmentVariable("MONGODB_CONNECTION"));
         database = client.GetDatabase(_database);
     }
-    
+
     public async Task<Event> Add(Event @event)
     {
         var collection = database.GetCollection<Event>(_collection);

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service-monitor", "service-monitor\service-monitor.csproj", "{BFC9866E-77BD-4B08-913C-D25000A0C904}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Monitor", "Service.Monitor\Service.Monitor.csproj", "{BFC9866E-77BD-4B08-913C-D25000A0C904}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
