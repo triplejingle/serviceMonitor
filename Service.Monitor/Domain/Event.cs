@@ -1,4 +1,4 @@
-﻿namespace service_monitor.Domain;
+﻿namespace Service.Monitor.Domain;
 
 public class Event
 {

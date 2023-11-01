@@ -1,6 +1,6 @@
-﻿using service_monitor.Domain;
+﻿using Service.Monitor.Domain;
 
-namespace service_monitor.Models;
+namespace Service.Monitor.Models;
 
 public class AddEventModel
 {

@@ -1,19 +1,26 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using service_monitor.Interfaces;
-using service_monitor.repository;
+using Service.Monitor.Interfaces;
+using Service.Monitor.Middleware;
+using Service.Monitor.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-bool _running = true;
+bool running = true;
+
 // Add services to the container.
 builder.Services.AddHealthChecks()
-    .AddCheck("self", () => _running ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy());
+    .AddCheck("self", () => running ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy());
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddTransient<IEventRepository, EventsRepository>();
+
+
+// ================================================================================================================== //
+
 
 var app = builder.Build();
 
@@ -27,6 +34,12 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseExceptionHandler(exceptionHandlerApp =>
+{
+    exceptionHandlerApp.Run(ExceptionHandlerMiddleware.HandleExceptionsAsync);
+});
+
 app.UseHealthChecks("/self", new HealthCheckOptions
 {
     Predicate = r => r.Name.Contains("self")

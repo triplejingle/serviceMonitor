@@ -1,6 +1,6 @@
-﻿using service_monitor.Domain;
+﻿using Service.Monitor.Domain;
 
-namespace service_monitor.Interfaces;
+namespace Service.Monitor.Interfaces;
 
 public interface IEventRepository
 {

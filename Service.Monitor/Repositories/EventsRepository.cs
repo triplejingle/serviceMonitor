@@ -1,25 +1,24 @@
 ﻿using MongoDB.Driver;
-using service_monitor.Domain;
-using service_monitor.Interfaces;
+using Service.Monitor.Domain;
+using Service.Monitor.Interfaces;
 
-namespace service_monitor.repository;
+namespace Service.Monitor.Repositories;
 
 public class EventsRepository : IEventRepository
 {
-    private const string _database = "monitor";
-    private const string _collection = "monitor";
-    private readonly IMongoDatabase database;
-    private readonly MongoClient MongoClient;
+    private const string Database = "monitor";
+    private const string Collection = "monitor";
+    private readonly IMongoDatabase _database;
 
     public EventsRepository()
     {
         var client = new MongoClient(Environment.GetEnvironmentVariable("MONGODB_CONNECTION"));
-        database = client.GetDatabase(_database);
+        _database = client.GetDatabase(Database);
     }
 
     public async Task<Event> Add(Event @event)
     {
-        var collection = database.GetCollection<Event>(_collection);
+        var collection = _database.GetCollection<Event>(Collection);
         await collection.InsertOneAsync(@event);
         return @event;
     }

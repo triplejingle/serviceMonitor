@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using service_monitor.Interfaces;
-using service_monitor.Models;
+using Service.Monitor.Domain;
+using Service.Monitor.Interfaces;
+using Service.Monitor.Models;
 
-namespace service_monitor.Controllers;
+namespace Service.Monitor.Controllers;
 
 [ApiController]
 [Route("/v1")]
@@ -17,17 +18,14 @@ public class MonitorController : ControllerBase
         _eventRepository = eventRepository;
     }
 
-    [HttpPost("events")]
+    [HttpPost]
+    [Route("events")]
+    [ProducesResponseType(typeof(Event), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
     public async Task<IActionResult> Post([FromBody] AddEventModel addEventModel)
     {
-        try
-        {
-            var @event = await _eventRepository.Add(addEventModel.ToEvent());
-            return Ok(@event);
-        }
-        catch (Exception e)
-        {
-            return BadRequest();
-        }
+        var @event = await _eventRepository.Add(addEventModel.ToEvent());
+        return Ok(@event);
     }
 }
