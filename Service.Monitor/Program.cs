@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.OpenApi.Models;
 using Service.Monitor.Interfaces;
 using Service.Monitor.Middleware;
 using Service.Monitor.Repositories;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,48 @@ builder.Services.AddHealthChecks()
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Appset Monitor API",
+        Version = "v1",
+        Description =
+            "The API for the monitor components for the apps.",
+        Contact = new OpenApiContact
+        {
+            Name = "Appset",
+            Email = "info@appset.nl",
+            Url = new Uri("https://appset.nl")
+        }
+    });
+
+    c.CustomSchemaIds(x => x.FullName);
+    // c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    // {
+    //     Name = "Authorization",
+    //     In = ParameterLocation.Header,
+    //     Type = SecuritySchemeType.OAuth2,
+    //     Flows = new OpenApiOAuthFlows
+    //     {
+    //         Implicit = new OpenApiOAuthFlow
+    //         {
+    //             Scopes = new Dictionary<string, string>
+    //             {
+    //                 { "openid", "Open Id" },
+    //                 { "Customer", "Customer" },
+    //                 { "ContentCreator", "ContentCreator" },
+    //                 { "Employee", "Employee" },
+    //                 { "BusinessOwner", "BusinessOwner" },
+    //                 { "Admin", "Admin" }
+    //             },
+    //             AuthorizationUrl = new Uri($"https://{auth0Settings.Domain}/authorize")
+    //         }
+    //     }
+    // });
+    c.IgnoreObsoleteProperties();
+});
+
 
 builder.Services.AddTransient<IEventRepository, EventsRepository>();
 
@@ -28,10 +71,26 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Core API V1");
+        c.RoutePrefix = string.Empty;
 
-app.UseHttpsRedirection();
+        c.DisplayOperationId();
+        c.DefaultModelRendering(ModelRendering.Model);
+        c.DocExpansion(DocExpansion.None);
+        c.EnableFilter();
+        c.EnableValidator();
+
+        // c.OAuthClientId(AppSettingsProvider.Auth0Settings.ClientId);
+        // c.OAuthAppName("Swagger Core Api");
+        // c.OAuthUsePkce();
+        // c.OAuthAdditionalQueryStringParams(new Dictionary<string, string>
+        // {
+            // { "audience", AppSettingsProvider.Auth0Settings.ApiIdentifier }
+        // });
+    });
+}
 
 app.UseAuthorization();
 
