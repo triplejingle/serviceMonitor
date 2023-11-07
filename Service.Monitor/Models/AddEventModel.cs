@@ -4,7 +4,7 @@ namespace Service.Monitor.Models;
 
 public class AddEventModel
 {
-    public string User { get; set; }
+    public string User { get; set; } = String.Empty;
     public string BusinessName { get; set; }
     public string Page { get; set; }
     public string Action { get; set; }
