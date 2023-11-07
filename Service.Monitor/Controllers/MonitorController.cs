@@ -19,6 +19,7 @@ public class MonitorController : ControllerBase
     }
 
     [HttpPost]
+    [HttpOptions]
     [Route("events")]
     [ProducesResponseType(typeof(Event), 200)]
     [ProducesResponseType(400)]
