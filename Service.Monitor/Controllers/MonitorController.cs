@@ -7,6 +7,7 @@ namespace Service.Monitor.Controllers;
 
 [ApiController]
 [Route("/v1")]
+[Produces("application/json")]
 public class MonitorController : ControllerBase
 {
     private readonly IEventRepository _eventRepository;
