@@ -8,6 +8,8 @@ public class AddEventModel
     public string BusinessName { get; set; }
     public string Page { get; set; }
     public string Action { get; set; }
+    
+    public dynamic? Data { get; set; }
 
     public Event ToEvent()
     {
@@ -17,6 +19,7 @@ public class AddEventModel
             BusinessName = BusinessName,
             Page = Page,
             Action = Action,
+            Data = Data,
             DateTime = DateTime.UtcNow
         };
     }
