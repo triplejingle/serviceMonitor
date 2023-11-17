@@ -14,9 +14,9 @@ public class JsonDocumentSerializer : SerializerBase<JsonDocument>
         return JsonDocument.Parse(myBsonDoc.ToString() ?? string.Empty);
     }
 
-    public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, JsonDocument value)
+    public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, JsonDocument? value)
     {
-        var myBsonDoc = BsonDocument.Parse(value.ToJsonString());
+        var myBsonDoc = BsonDocument.Parse(value?.ToJsonString());
         BsonDocumentSerializer.Instance.Serialize(context, myBsonDoc);
     }
 }
