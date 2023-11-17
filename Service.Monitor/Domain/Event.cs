@@ -6,6 +6,6 @@ public class Event
     public string BusinessName { get; set; }
     public string Page { get; set; }
     public string Action { get; set; }
-    public dynamic? Data { get; set; }
+    public Dictionary<string, object>? Data { get; set; }
     public DateTime DateTime { get; set; }
 }

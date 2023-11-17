@@ -9,7 +9,7 @@ public class AddEventModel
     public string Page { get; set; }
     public string Action { get; set; }
     
-    public dynamic? Data { get; set; }
+    public Dictionary<string, object>? Data { get; set; }
 
     public Event ToEvent()
     {
