@@ -4,12 +4,12 @@ namespace Service.Monitor.Models;
 
 public class AddEventModel
 {
-    public string User { get; set; } = String.Empty;
+    public string User { get; set; } = string.Empty;
     public string BusinessName { get; set; }
     public string Page { get; set; }
     public string Action { get; set; }
     
-    public Dictionary<string, object>? Data { get; set; }
+    public IEventData? Data { get; set; }
 
     public Event ToEvent()
     {
