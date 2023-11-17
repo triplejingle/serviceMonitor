@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
@@ -14,7 +15,7 @@ public class JsonDocumentSerializer : SerializerBase<JsonDocument>
 
     public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, JsonDocument value)
     {
-        var myBsonDoc = MongoDB.Bson.BsonDocument.Parse(value.ToString());
+        var myBsonDoc = value.ToBsonDocument();
         BsonDocumentSerializer.Instance.Serialize(context, myBsonDoc);
     }
 }
