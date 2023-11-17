@@ -1,4 +1,8 @@
-﻿namespace Service.Monitor.Domain;
+﻿using System.Text.Json;
+using MongoDB.Bson.Serialization.Attributes;
+using Service.Monitor.Serializers;
+
+namespace Service.Monitor.Domain;
 
 public class Event
 {
@@ -6,22 +10,7 @@ public class Event
     public string BusinessName { get; set; }
     public string Page { get; set; }
     public string Action { get; set; }
-    public IEventData? Data { get; set; }
+    [BsonSerializer(typeof(JsonDocumentSerializer))]
+    public JsonDocument? Data { get; set; }
     public DateTime DateTime { get; set; }
-}
-
-
-public interface IEventData
-{
-    
-}
-
-public class EventUtmData : IEventData
-{
-    public string? UtmId { get; set; }
-    public string UtmSource { get; set; } = string.Empty;
-    public string UtmMedium { get; set; } = string.Empty;
-    public string? UtmCampaign { get; set; }
-    public string? UtmTerm { get; set; }
-    public string? UtmContent { get; set; }
 }
