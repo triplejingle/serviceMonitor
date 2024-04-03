@@ -1,20 +1,19 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Service.Monitor.Domain;
+using Service.Monitor.Helper;
 using Service.Monitor.Interfaces;
 
 namespace Service.Monitor.Repositories;
 
 public class ViewsRepository : IViewsRepository
 {
-    private const string Database = "monitor";
-    private const string ActionsPerBusinessView = "ActionsPerBusiness";
     private readonly IMongoDatabase _database;
 
     public ViewsRepository()
     {
-        var client = new MongoClient(Environment.GetEnvironmentVariable("MONGODB_CONNECTION"));
-        _database = client.GetDatabase(Database);
+        var client = new MongoClient(DatabaseProperties.ConnectionString);
+        _database = client.GetDatabase(DatabaseProperties.Database);
     }
 
     public async Task<List<ActionsPerBusiness>> GetActionsPerBusiness(
@@ -26,7 +25,7 @@ public class ViewsRepository : IViewsRepository
     )
     {
         var collection = _database
-            .GetCollection<ActionsPerBusiness>(ActionsPerBusinessView)
+            .GetCollection<ActionsPerBusiness>(DatabaseProperties.ViewsTable)
             .AsQueryable()
             .Where(a => a._id.BusinessName == businessName);
 
