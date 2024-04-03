@@ -60,7 +60,7 @@ builder.Services.AddSwaggerGen(c =>
 
 
 builder.Services.AddTransient<IEventRepository, EventsRepository>();
-
+builder.Services.AddTransient<IViewsRepository, ViewsRepository>();
 
 // ================================================================================================================== //
 
@@ -87,7 +87,7 @@ if (app.Environment.IsDevelopment())
         // c.OAuthUsePkce();
         // c.OAuthAdditionalQueryStringParams(new Dictionary<string, string>
         // {
-            // { "audience", AppSettingsProvider.Auth0Settings.ApiIdentifier }
+        // { "audience", AppSettingsProvider.Auth0Settings.ApiIdentifier }
         // });
     });
 }

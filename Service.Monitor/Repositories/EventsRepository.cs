@@ -8,7 +8,6 @@ public class EventsRepository : IEventRepository
 {
     private const string Database = "monitor";
     private const string Collection = "monitor";
-    private const string ActionsPerBusinessView = "ActionsPerBusiness";
     private readonly IMongoDatabase _database;
 
     public EventsRepository()
@@ -22,13 +21,5 @@ public class EventsRepository : IEventRepository
         var collection = _database.GetCollection<Event>(Collection);
         await collection.InsertOneAsync(@event);
         return @event;
-    }
-
-    public async Task<List<ActionsPerBusiness>> GetByMonitor(string businessName)
-    {
-        var collection = _database.GetCollection<ActionsPerBusiness>(ActionsPerBusinessView);
-        var cursor = await collection.FindAsync(g => g._id.BusinessName == businessName);
-        var result = await cursor.ToListAsync();
-        return result;
     }
 }

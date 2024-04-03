@@ -30,16 +30,4 @@ public class MonitorController : ControllerBase
         var @event = await _eventRepository.Add(addEventModel.ToEvent());
         return Ok(@event);
     }
-    
-    [HttpGet]
-    [HttpOptions]
-    [Route("events/{businessName}")]
-    [ProducesResponseType(typeof(Event), 200)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(500)]
-    public async Task<IActionResult> GetByMonitor([FromRoute] string businessName)
-    {
-        var actionsPerBusinesses = await _eventRepository.GetByMonitor(businessName);
-        return Ok(actionsPerBusinesses);
-    }
 }
