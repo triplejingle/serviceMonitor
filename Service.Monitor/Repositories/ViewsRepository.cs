@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.VisualBasic;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Service.Monitor.Domain;
 using Service.Monitor.Helper;
@@ -16,39 +17,45 @@ public class ViewsRepository : IViewsRepository
         _database = client.GetDatabase(DatabaseProperties.Database);
     }
 
-    public async Task<List<ActionsPerBusiness>> GetActionsPerBusiness(
-        string businessName,
-        string? page,
-        string? action,
-        DateTime? start = null,
-        DateTime? end = null
-    )
+    public async Task<List<ActionsPerBusiness>> GetActionsPerBusiness(ActionsPerBusiness actionPerBusiness,
+        DateTime start, DateTime end)
     {
+        var defaultData = actionPerBusiness._id;
         var collection = _database
             .GetCollection<ActionsPerBusiness>(DatabaseProperties.ViewsTable)
             .AsQueryable()
-            .Where(a => a._id.BusinessName == businessName);
+            .Where(a =>
+                a._id.BusinessName == defaultData.BusinessName
+            );
 
-        if (page != null)
+        collection = collection.Where(a => a._id.Date >= start);
+        collection = collection.Where(a => a._id.Date <= end);
+        List<ActionsPerBusiness> actionsPerBusinessesCollection = await collection.ToListAsync();
+
+        return AddDefaultDataToBusinessList(actionsPerBusinessesCollection, defaultData, start, end);
+    }
+
+    private List<ActionsPerBusiness> AddDefaultDataToBusinessList(List<ActionsPerBusiness> initialList,
+        ActionsPerBusinessId defaultData, DateTime start,
+        DateTime end)
+    {
+        DateTime currentDate = start;
+        long nrOfDays = DateAndTime.DateDiff(DateInterval.Day, start, end);
+        var actionsPerBusinessList = new List<ActionsPerBusiness>();
+        for (int i = 0; i < nrOfDays; i++)
         {
-            collection = collection.Where(a => a._id.Page == page);
+            var actionsPerBusiness = initialList.FirstOrDefault(a => a._id.Date.Date == currentDate.Date);
+            if (actionsPerBusiness == null)
+            {
+                actionsPerBusiness = new ActionsPerBusiness();
+                actionsPerBusiness._id = defaultData.ShallowCopy();
+            }
+
+            actionsPerBusiness._id.Date = currentDate;
+            actionsPerBusinessList.Add(actionsPerBusiness);
+            currentDate = currentDate.AddDays(1);
         }
 
-        if (action != null)
-        {
-            collection = collection.Where(a => a._id.Action == action);
-        }
-
-        if (start != null)
-        {
-            collection = collection.Where(a => a._id.Date >= start);
-        }
-
-        if (end != null)
-        {
-            collection = collection.Where(a => a._id.Date <= end);
-        }
-
-        return await collection.ToListAsync();
+        return actionsPerBusinessList;
     }
 }

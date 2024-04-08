@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Service.Monitor.Domain;
 using Service.Monitor.Interfaces;
+using Service.Monitor.Models;
 
 namespace Service.Monitor.Controllers;
 
@@ -17,21 +17,24 @@ public class ViewsController : ControllerBase
         _viewsRepository = viewsRepository;
     }
 
-    [HttpGet]
+    [HttpPost]
     [HttpOptions]
-    [Route("views/actions/{businessName}")]
-    [ProducesResponseType(typeof(Event), 200)]
+    [Route("views/actions")]
+    [ProducesResponseType(typeof(GetGraphDataCollectionModel), 200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
     public async Task<IActionResult> GetActionsPerBusiness(
-        [FromRoute] string businessName,
-        [FromQuery] string? page,
-        [FromQuery] string? action,
-        [FromQuery] DateTime? start,
-        [FromQuery] DateTime? end
-    )
+        [FromBody] GetActionPerBusinessModel getActionPerBusinessModel)
     {
-        var actionsPerBusinesses = await _viewsRepository.GetActionsPerBusiness(businessName, page, action, start, end);
-        return Ok(actionsPerBusinesses);
+        var actionPerBusiness = getActionPerBusinessModel.ToActionPerBusinessModel();
+        var actionPerBusinessList = await _viewsRepository.GetActionsPerBusiness(actionPerBusiness,
+            getActionPerBusinessModel.Start, getActionPerBusinessModel.End);
+
+        var getActionPerBusinessCollectionModel = new GetGraphDataCollectionModel(actionPerBusinessList);
+        GraphData graphData = new GraphData(actionPerBusinessList, getActionPerBusinessModel.Page,
+            getActionPerBusinessModel.Action);
+        getActionPerBusinessCollectionModel.Data.Add(graphData);
+
+        return Ok(getActionPerBusinessCollectionModel);
     }
 }

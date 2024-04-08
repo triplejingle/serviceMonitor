@@ -1,3 +1,7 @@
+using Framework.Application.Authorization.CORS;
+using Framework.Persistence;
+using Framework.Persistence.Interfaces;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
@@ -58,15 +62,22 @@ builder.Services.AddSwaggerGen(c =>
     c.IgnoreObsoleteProperties();
 });
 
+#region Cors
 
+builder.Services.AddTransient<ICorsPolicyProvider, AppCorsPolicyProvider>();
+builder.Services.AddScoped<IFrameworkSettingsQueryCollection, FrameworkSettingsQueryCollection>();
 builder.Services.AddTransient<IEventRepository, EventsRepository>();
+builder.Services.AddTransient<IFrameworkCoreDbConnection, FrameworkCoreDbConnection>();
+
+#endregion
+
 builder.Services.AddTransient<IViewsRepository, ViewsRepository>();
 
 // ================================================================================================================== //
 
-
 var app = builder.Build();
 
+app.UseCors("MyPolicy");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
