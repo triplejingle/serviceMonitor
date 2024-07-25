@@ -5,18 +5,26 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using Service.Monitor.Interfaces;
 using Service.Monitor.Middleware;
 using Service.Monitor.Repositories;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-bool running = true;
+bool _running = true;
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSerilog((services, lc) => lc
+    .ReadFrom.Configuration(builder.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext());
 
 // Add services to the container.
 builder.Services.AddHealthChecks()
-    .AddCheck("self", () => running ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy());
+    .AddCheck("self", () => _running ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy());
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
