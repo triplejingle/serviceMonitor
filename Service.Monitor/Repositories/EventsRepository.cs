@@ -1,7 +1,8 @@
 ﻿using MongoDB.Driver;
 using Service.Monitor.Domain;
-using Service.Monitor.Helper;
-using Service.Monitor.Interfaces;
+using Service.Monitor.Repositories.DbModels;
+using Service.Monitor.Repositories.Helper;
+using Service.Monitor.Repositories.Interfaces;
 
 namespace Service.Monitor.Repositories;
 
@@ -17,8 +18,9 @@ public class EventsRepository : IEventRepository
 
     public async Task<Event> Add(Event @event)
     {
-        var collection = _database.GetCollection<Event>(DatabaseProperties.EventsTable);
-        await collection.InsertOneAsync(@event);
+        var eventDbModel = new EventDbModel(@event);
+        var collection = _database.GetCollection<EventDbModel>(DatabaseProperties.EventsTable);
+         await collection.InsertOneAsync(@eventDbModel);
         return @event;
     }
 }

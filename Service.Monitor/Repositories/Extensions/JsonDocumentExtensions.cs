@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 
-namespace Service.Monitor.Extensions;
+namespace Service.Monitor.Repositories.Extensions;
 
 public static class JsonDocumentExtensions
 {

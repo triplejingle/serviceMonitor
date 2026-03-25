@@ -1,4 +1,4 @@
-﻿namespace Service.Monitor.Helper;
+﻿namespace Service.Monitor.Repositories.Helper;
 
 public class DatabaseProperties
 {

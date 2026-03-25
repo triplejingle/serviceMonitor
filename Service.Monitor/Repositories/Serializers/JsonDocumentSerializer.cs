@@ -2,9 +2,9 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-using Service.Monitor.Extensions;
+using Service.Monitor.Repositories.Extensions;
 
-namespace Service.Monitor.Serializers;
+namespace Service.Monitor.Repositories.Serializers;
 
 public class JsonDocumentSerializer : SerializerBase<JsonDocument>
 {

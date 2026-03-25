@@ -1,15 +1,24 @@
 ﻿using Service.Monitor.Domain;
 
-namespace Service.Monitor.Models;
+namespace Service.Monitor.Services.Responses;
 
-public class GetGraphDataCollectionModel
+public class GetGraphDataCollectionResponse
 {
-    public GetGraphDataCollectionModel(List<ActionsPerBusiness> actionPerBusinessList)
+    public GetGraphDataCollectionResponse(List<ActionsPerBusiness> actionPerBusinessList)
     {
         foreach (var actionsPerBusiness in actionPerBusinessList)
         {
-            Labels.Add(actionsPerBusiness._id.Date.ToString());
+            Labels.Add(actionsPerBusiness.id.Date.ToString());
         }
+    }
+
+    public void AddGraphDataData(List<ActionsPerBusiness> actionPerBusinessList, string action, string page)
+    {
+        GraphData graphData = new GraphData(
+            actionPerBusinessList,
+            page,
+            action);
+        Data.Add(graphData);
     }
 
     public List<string> Labels { get; set; } = new();

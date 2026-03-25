@@ -2,17 +2,28 @@
 
 public class ActionsPerBusiness
 {
-    //_id attribute is because of the view to change this the pipeline of the view has to be updated.
-    public ActionsPerBusinessId _id { get; set; }
-    public int Count { get; set; }
+    public ActionsPerBusiness(ActionsPerBusinessId id)
+    {
+        this.id = id;
+    }
+
+    public ActionsPerBusinessId id { get; set; }
+    public int Count { get; set; } = 0;
 }
 
 public class ActionsPerBusinessId
 {
+    public ActionsPerBusinessId(string businessName, string action, string page)
+    {
+        BusinessName = businessName;
+        Action = action;
+        Page = page;
+    }
+
     public string BusinessName { get; set; }
     public string Action { get; set; }
     public string Page { get; set; }
-    public DateTime Date { get; set; }
+    public DateTime Date { get; set; } = DateTime.Now;
 
     public ActionsPerBusinessId ShallowCopy()
     {

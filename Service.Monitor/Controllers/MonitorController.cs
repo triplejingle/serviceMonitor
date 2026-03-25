@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Service.Monitor.Domain;
-using Service.Monitor.Interfaces;
-using Service.Monitor.Models;
+using Service.Monitor.Controllers.Requests;
+using Service.Monitor.Services.Interfaces;
+using Service.Monitor.Services.Responses;
 
 namespace Service.Monitor.Controllers;
 
@@ -10,24 +10,24 @@ namespace Service.Monitor.Controllers;
 [Produces("application/json")]
 public class MonitorController : ControllerBase
 {
-    private readonly IEventRepository _eventRepository;
+    private readonly IEventService _eventService;
     private readonly ILogger<MonitorController> _logger;
 
-    public MonitorController(ILogger<MonitorController> logger, IEventRepository eventRepository)
+    public MonitorController(ILogger<MonitorController> logger, IEventService eventService)
     {
         _logger = logger;
-        _eventRepository = eventRepository;
+        _eventService = eventService;
     }
 
     [HttpPost]
     [HttpOptions]
     [Route("events")]
-    [ProducesResponseType(typeof(Event), 200)]
+    [ProducesResponseType(typeof(EventResponse), 200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> Post([FromBody] AddEventModel addEventModel)
+    public async Task<IActionResult> Post([FromBody] AddEventRequest addEventRequest)
     {
-        var @event = await _eventRepository.Add(addEventModel.ToEvent());
-        return Ok(@event);
+        _logger.LogInformation("Received request to add event");
+        return Ok(_eventService.AddEvent(addEventRequest.ToEvent()));
     }
 }

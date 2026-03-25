@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Service.Monitor.Interfaces;
-using Service.Monitor.Models;
+using Service.Monitor.Controllers.Requests;
+using Service.Monitor.Services.Interfaces;
+using Service.Monitor.Services.Responses;
 
 namespace Service.Monitor.Controllers;
 
@@ -10,31 +11,33 @@ namespace Service.Monitor.Controllers;
 public class ViewsController : ControllerBase
 {
     private readonly ILogger<MonitorController> _logger;
-    private readonly IViewsRepository _viewsRepository;
+    private readonly IViewService _viewsService;
 
-    public ViewsController(IViewsRepository viewsRepository)
+    public ViewsController(IViewService viewsService)
     {
-        _viewsRepository = viewsRepository;
+        _viewsService = viewsService;
     }
 
     [HttpPost]
     [HttpOptions]
     [Route("views/actions")]
-    [ProducesResponseType(typeof(GetGraphDataCollectionModel), 200)]
+    [ProducesResponseType(typeof(GetGraphDataCollectionResponse), 200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
     public async Task<IActionResult> GetActionsPerBusiness(
-        [FromBody] GetActionPerBusinessModel getActionPerBusinessModel)
+        [FromBody] GetActionPerBusinessRequest getActionPerBusinessRequest)
     {
-        var actionPerBusiness = getActionPerBusinessModel.ToActionPerBusinessModel();
-        var actionPerBusinessList = await _viewsRepository.GetActionsPerBusiness(actionPerBusiness,
-            getActionPerBusinessModel.Start, getActionPerBusinessModel.End);
-
-        var getActionPerBusinessCollectionModel = new GetGraphDataCollectionModel(actionPerBusinessList);
-        GraphData graphData = new GraphData(actionPerBusinessList, getActionPerBusinessModel.Page,
-            getActionPerBusinessModel.Action);
-        getActionPerBusinessCollectionModel.Data.Add(graphData);
-
-        return Ok(getActionPerBusinessCollectionModel);
+        _logger.LogInformation("Received request to get actions per business");
+        var actionPerBusiness = getActionPerBusinessRequest.ToActionPerBusinessModel();
+        
+        var actionPerBusinessList = await _viewsService.GetActionsPerBusiness(
+            actionPerBusiness,
+            getActionPerBusinessRequest.Start,
+            getActionPerBusinessRequest.End,
+            getActionPerBusinessRequest.Action,
+            getActionPerBusinessRequest.Page
+            );
+        
+        return Ok(actionPerBusinessList);
     }
 }
