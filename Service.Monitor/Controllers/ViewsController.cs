@@ -28,16 +28,7 @@ public class ViewsController : ControllerBase
         [FromBody] GetActionPerBusinessRequest getActionPerBusinessRequest)
     {
         _logger.LogInformation("Received request to get actions per business");
-        var actionPerBusiness = getActionPerBusinessRequest.ToActionPerBusinessModel();
-        
-        var actionPerBusinessList = await _viewsService.GetActionsPerBusiness(
-            actionPerBusiness,
-            getActionPerBusinessRequest.Start,
-            getActionPerBusinessRequest.End,
-            getActionPerBusinessRequest.Action,
-            getActionPerBusinessRequest.Page
-            );
-        
+        var actionPerBusinessList = await _viewsService.GetActionsPerBusiness(getActionPerBusinessRequest);
         return Ok(actionPerBusinessList);
     }
 }

@@ -1,4 +1,4 @@
-using Service.Monitor.Domain;
+using Service.Monitor.Controllers.Requests;
 using Service.Monitor.Repositories.Interfaces;
 using Service.Monitor.Services.Interfaces;
 using Service.Monitor.Services.Responses;
@@ -14,8 +14,9 @@ public class EventService:IEventService
         _eventRepository = eventRepository;
     }
     
-    public async Task<EventResponse> AddEvent(Event @event)
+    public async Task<EventResponse> AddEvent(AddEventRequest @eventRequest)
     {
+        var @event = @eventRequest.ToEvent();
         var @addedEvent = await _eventRepository.Add(@event);
         return new EventResponse(@addedEvent);
     }

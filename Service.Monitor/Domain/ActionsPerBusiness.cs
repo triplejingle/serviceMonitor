@@ -7,7 +7,7 @@ public class ActionsPerBusiness
         this.id = id;
     }
 
-    public ActionsPerBusinessId id { get; set; }
+    public ActionsPerBusinessId id { get; set; } 
     public int Count { get; set; } = 0;
 }
 

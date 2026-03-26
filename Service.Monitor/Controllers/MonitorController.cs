@@ -28,6 +28,7 @@ public class MonitorController : ControllerBase
     public async Task<IActionResult> Post([FromBody] AddEventRequest addEventRequest)
     {
         _logger.LogInformation("Received request to add event");
-        return Ok(_eventService.AddEvent(addEventRequest.ToEvent()));
+        var eventResponse = await _eventService.AddEvent(addEventRequest);
+        return Ok(eventResponse);
     }
 }
